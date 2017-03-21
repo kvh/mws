@@ -47,7 +47,7 @@ MARKETPLACES = {
     "UK" : "https://mws-eu.amazonservices.com", #A1F83G8C2ARO7P
     "JP" : "https://mws.amazonservices.jp", #A1VC38T7YXB528
     "CN" : "https://mws.amazonservices.com.cn", #AAHKV2X7AFYLW
-    "MX" : "https://mws.amazonservices.com.mx", #A1AM78C64UM0Y8    
+    "MX" : "https://mws.amazonservices.com.mx", #A1AM78C64UM0Y8
 }
 
 
@@ -206,9 +206,10 @@ class MWS(object):
             # I do not check the headers to decide which content structure to server simply because sometimes
             # Amazon's MWS API returns XML error responses with "text/plain" as the Content-Type.
             try:
-                parsed_response = DictWrapper(data, extra_data.get("Action") + "Result")
-            except TypeError:  # raised when using Python 3 and trying to remove_namespace()
-                parsed_response = DictWrapper(response.text, extra_data.get("Action") + "Result")
+                try:
+                    parsed_response = DictWrapper(data, extra_data.get("Action") + "Result")
+                except TypeError:  # raised when using Python 3 and trying to remove_namespace()
+                    parsed_response = DictWrapper(response.text, extra_data.get("Action") + "Result")
             except XMLError:
                 parsed_response = DataWrapper(data, response.headers)
 
